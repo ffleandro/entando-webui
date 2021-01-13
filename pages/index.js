@@ -1,20 +1,25 @@
 import Head from 'next/head';
-import CardGridWidget from '../components/widgets/cardgrid.jsx';
-import styles from '../styles/Home.module.css';
+import React from 'react';
 
+import Header from '../components/widgets/Header/index.jsx';
+import Menu from '../components/widgets/Menu/index.jsx';
 import {
-  Entando6KeycloakAccessTokenDataSource,
   Entando6CMSContentsDataSource,
-  Entando6CMSContentDataSource,
-} from '../datasources/entando6-cms.js';
+  Entando6KeycloakAccessTokenDataSource,
+} from '../datasources/entando6-cms';
+import styles from '../styles/Home.module.css';
+import { PRODUCT_CATEGORIES } from '../utils/mocks';
 
 export default function Home({ products, categories, banners }) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Entando</title>
+        <title>{'Entando'}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <Header />
+      <Menu categories={categories} />
 
       <main className={styles.main}>
         {products.map((p) => (
@@ -36,8 +41,7 @@ export default function Home({ products, categories, banners }) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
+          {'Powered by'} <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
         </a>
       </footer>
     </div>
@@ -46,7 +50,7 @@ export default function Home({ products, categories, banners }) {
 
 export async function getStaticProps() {
   console.log('Calling getStaticProps');
-  
+
   const baseurl = 'http://quickstart-release-e6-3-0.apps.rd.entando.org/entando-de-app';
   const clientId = 'entando-bundler';
   const clientSecret = '1c5e2fe8-ff41-4bc7-8f2b-3509133a2a91';
@@ -64,7 +68,7 @@ export async function getStaticProps() {
 
   const results = await Promise.all(datasources.map(async (d) => d()));
 
-  const [ banners, products, categories ] = results;
+  const [banners, products, categories] = results;
 
   return {
     props: {
