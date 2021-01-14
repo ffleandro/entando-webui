@@ -2,7 +2,13 @@ import Head from 'next/head';
 import CardGridWidget from '../components/widgets/cardgrid.jsx';
 import styles from '../styles/Home.module.css';
 
-export default function Home({ cards }) {
+import {
+  Entando6KeycloakAccessTokenDataSource,
+  Entando6CMSContentsDataSource,
+  Entando6CMSContentDataSource,
+} from '../datasources/entando6-cms.js';
+
+export default function Home({ products, categories, banners }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -11,16 +17,17 @@ export default function Home({ cards }) {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        {products.map((p) => (
+          <p key={p.id}>{p.id}</p>
+        ))}
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+        {categories.map((c) => (
+          <p key={c.id}>{c.id}</p>
+        ))}
 
-        <CardGridWidget cards={cards} />
+        {banners.map((b) => (
+          <p key={b.id}>{b.id}</p>
+        ))}
       </main>
 
       <footer className={styles.footer}>
@@ -38,42 +45,32 @@ export default function Home({ cards }) {
 }
 
 export async function getStaticProps() {
-  const cards = [
-    {
-      title: 'Documentation',
-      description: 'Find in-depth information about Next.js features and API.',
-      link: 'breno',
-    },
-    {
-      title: 'Learn',
-      description: 'Learn about Next.js in an interactive course with quizzes!',
-      link: 'https://nextjs.org/learn',
-    },
-    {
-      title: 'Documentation',
-      description: 'Find in-depth information about Next.js features and API.',
-      link: 'https://github.com/vercel/next.js/tree/master/examples',
-    },
-    {
-      title: 'Deploy',
-      description:
-        'Instantly deploy your Next.js site to a public URL with Vercel.',
-      link:
-        'https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app',
-    },
+  console.log('Calling getStaticProps');
+  
+  const baseurl = 'http://quickstart-release-e6-3-0.apps.rd.entando.org/entando-de-app';
+  const clientId = 'entando-bundler';
+  const clientSecret = '1c5e2fe8-ff41-4bc7-8f2b-3509133a2a91';
+
+  const token = await Entando6KeycloakAccessTokenDataSource(baseurl, clientId, clientSecret)();
+  console.log('Fetched Entando Keycloak Token');
+
+  const datasources = [
+    Entando6CMSContentsDataSource(baseurl, token, 'PRD'),
+    Entando6CMSContentsDataSource(baseurl, token, 'CTG'),
+    Entando6CMSContentsDataSource(baseurl, token, 'BAN'),
   ];
 
-  /* Promise.all(datasources)
+  console.log('Created datasources...');
 
-  const res = await fetch(
-    'https://entando-de-app-url.com/api/cms/contents/NWS123'
-  );
-  const contents = await res.json(); */
+  const results = await Promise.all(datasources.map(async (d) => d()));
+
+  const [ banners, products, categories ] = results;
 
   return {
     props: {
-      cards,
-      // contents,
+      products,
+      categories,
+      banners,
     },
   };
 }

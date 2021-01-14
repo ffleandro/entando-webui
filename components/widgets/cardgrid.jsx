@@ -7,6 +7,7 @@ const CardGridWidget = ({ cards }) => (
   <div className={styles.grid}>
     {cards.map((card) => (
       <CardWidget
+        key={card.title}
         title={card.title}
         description={card.description}
         link={card.link}
