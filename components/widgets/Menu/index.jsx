@@ -6,9 +6,12 @@ import styles from './Menu.module.css';
 export const Menu = ({ categories }) => (
   <nav className={styles.wrapper}>
     <ul className={styles.menu}>
-      {categories.map(({ title }) => (
+      {categories.map(({ title, link, icon }) => (
         <li key={title}>
-          <a href="">{title}</a>
+          <a href={link}>
+            {icon && <img src={icon} />}
+            {title}
+          </a>
         </li>
       ))}
     </ul>

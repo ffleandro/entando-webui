@@ -14,6 +14,3 @@ export const Standard = Template.bind({});
 Standard.args = {
   categories: PRODUCT_CATEGORIES,
 };
-
-// export const LoggedOut = Template.bind({});
-// LoggedOut.args = {};
