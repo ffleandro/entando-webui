@@ -1,4 +1,5 @@
-//import objectMapper from 'object-mapper';
+import useSWR from "swr";
+import axios from 'axios';
 
 import { Entando6CMSContentDataSource, Entando6CMSContentsDataSource } from './entando6-cms';
 
@@ -11,13 +12,36 @@ export function ProductsDataSource(url, token) {
   };
 }
 
-export function ProductsDataSourceWithSwr(url, token) {
-  console.log(`Creating Products Data Source: ${url}`);
-  return async () => {
-    console.log('Calling ProductsDataSource...');
-    const products = await new Entando6CMSContentsDataSource(url, token, 'PRD')();
-    return products.map((p) => normalizeProduct(url, p));
-  };
+export const ProductsDataSourceWithSwr = (baseurl, token) => {
+
+  /*const products = Entando6CMSContentsDataSource(baseurl, token, 'PRD')();
+  return products.map((p) => normalizeProduct(baseurl, p));*/
+  /*
+  axios.get(
+      `${url}/api/plugins/cms/contents?filters[0].attribute=typeCode&filters[0].operator=eq&filters[0].value=${contentType}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    )*/
+
+  /*const fetcher = url => fetch(url).then(r => r.json())
+  const fetcher = url => axios.get(url).then(res => res.data)*/
+  /*const fetcher = url => fetch(url).then(res => res.json())*/
+
+  const url2 = `${baseurl}/api/plugins/cms/contents?filters[0].attribute=typeCode&filters[0].operator=eq&filters[0].value=PRD`;
+  //const url2 = `https://jsonplaceholder.typicode.com/posts`;
+
+  const fetcher = url => axios.get(url2, { headers: { Authorization: `Bearer ${token}` } }
+    ).then(res => {
+    debugger;
+    return res.data.payload;
+  })
+  
+  console.log(url2);
+
+  const response = useSWR(url2, fetcher)
+
+  debugger;
+
+  return { response }
 }
 
 export function CategoriesDataSource(url, token) {

@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import React from 'react';
+import useSWR from "swr"
 
 import Banner from '../components/widgets/Banner/index.jsx';
 import Footer from '../components/widgets/Footer/index.jsx';
@@ -10,36 +11,58 @@ import {
   BannersDataSource,
   CategoriesDataSource,
   ProductsDataSource,
+  ProductsDataSourceWithSwr,
 } from '../datasources/ecommerce-entando6-cms';
 import { Entando6KeycloakAccessTokenDataSource } from '../datasources/entando6-cms';
 import styles from '../styles/Home.module.css';
 
 const URL = 'http://quickstart-release-e6-3-0.apps.rd.entando.org';
 
-export default function Home({ products = [], categories = [], banners = [] }) {
+export default function Home({ products = [], categories = [], banners = [], baseurl, token }) {
+  const products2 = ProductsDataSourceWithSwr(baseurl, token)
+  if (!products2) return <h1>Loading...</h1>
+  console.log(products2);
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>{'Entando'}</title>
-        <link rel="icon" href="/favicon.png" />
-      </Head>
+    <div>
+      <div className="container">
+        <h1>My Products</h1>
+      </div>
+      <div className={styles.container}>
+        <Head>
+          <title>{'Entando'}</title>
+          <link rel="icon" href="/favicon.png" />
+        </Head>
 
-      <Header />
-      <Menu categories={categories} />
-      <Banner banners={banners} />
+        <Header />
+        <Menu categories={categories} />
+        <Banner banners={banners} />
 
-      <main className={styles.main}>
-        <h2 className={styles.title}>{'Daily Offers'}</h2>
-        <div className={styles.productList}>
-          {products.map((product) => (
-            <ProductCard key={product.id} {...product} />
-          ))}
-        </div>
-      </main>
+        <main className={styles.main}>
+          <h2 className={styles.title}>{'Daily Offers'}</h2>
+          <div className={styles.productList}>
+            {products.map((product) => (
+              <ProductCard key={product.id} {...product} />
+            ))}
+          </div>
+        </main>
 
-      <Footer />
+        <Footer />
+      </div>
     </div>
   );
+}
+
+export function Product({ product2 }) {
+  console.log('Aqui: ${product2}');
+  const { id } = product2
+  return (
+    <div className="Card">
+      <h1 className="Card--title">
+        {id}
+      </h1>
+    </div>
+  )
 }
 
 export async function getStaticProps() {
@@ -53,7 +76,7 @@ export async function getStaticProps() {
   console.log('Fetched Entando Keycloak Token');
 
   const datasources = [
-    //ProductsDataSource(baseurl, token),
+    ProductsDataSource(baseurl, token),
     CategoriesDataSource(baseurl, token),
     BannersDataSource(baseurl, token),
   ];
@@ -69,6 +92,8 @@ export async function getStaticProps() {
       products,
       categories,
       banners,
+      baseurl,
+      token,
     },
   };
 }
