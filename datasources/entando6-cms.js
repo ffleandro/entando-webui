@@ -46,6 +46,23 @@ export function Entando6CMSContentDataSource(url, token, contentId) {
   };
 }
 
+export function Entando6CMSContentAttributeDataSource(url, token, contentId, attributeCode) {
+  console.log(`Creating Content Attribute Data Source: ${url}, ${contentId}, ${attributeCode}`);
+  return async () => {
+    console.log('Calling Entando6CMSContentAttributeDataSource...');
+    const res = await axios.get(`${url}/api/plugins/cms/contents/${contentId}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    const attributes = res.data.payload.attributes;
+    for(var i = 0; i < attributes.length; i++){
+      if(attributes[i].code === attributeCode) {
+        return attributes[i];
+      }
+    }
+    return null;
+  };
+}
+
 // private utility function
 const urlEncoder = function (payload) {
   return Object.keys(payload)
