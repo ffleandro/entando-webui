@@ -27,6 +27,9 @@ export default function Home({ products = [], categories = [], banners = [], bas
     <div>
       <div className="container">
         <h1>My Products</h1>
+        {products2.map(product2 => (
+          <Product product2={product2} key={post.id} />
+        ))}
       </div>
       <div className={styles.container}>
         <Head>
