@@ -1,5 +1,5 @@
-import useSWR from "swr";
 import axios from 'axios';
+import useSWR from 'swr';
 
 import { Entando6CMSContentDataSource, Entando6CMSContentsDataSource } from './entando6-cms';
 
@@ -10,38 +10,6 @@ export function ProductsDataSource(url, token) {
     const products = await new Entando6CMSContentsDataSource(url, token, 'PRD')();
     return products.map((p) => normalizeProduct(url, p));
   };
-}
-
-export const ProductsDataSourceWithSwr = (baseurl, token) => {
-
-  /*const products = Entando6CMSContentsDataSource(baseurl, token, 'PRD')();
-  return products.map((p) => normalizeProduct(baseurl, p));*/
-  /*
-  axios.get(
-      `${url}/api/plugins/cms/contents?filters[0].attribute=typeCode&filters[0].operator=eq&filters[0].value=${contentType}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    )*/
-
-  /*const fetcher = url => fetch(url).then(r => r.json())
-  const fetcher = url => axios.get(url).then(res => res.data)*/
-  /*const fetcher = url => fetch(url).then(res => res.json())*/
-
-  const url2 = `${baseurl}/api/plugins/cms/contents?filters[0].attribute=typeCode&filters[0].operator=eq&filters[0].value=PRD`;
-  //const url2 = `https://jsonplaceholder.typicode.com/posts`;
-
-  const fetcher = url => axios.get(url2, { headers: { Authorization: `Bearer ${token}` } }
-    ).then(res => {
-    debugger;
-    return res.data.payload;
-  })
-  
-  console.log(url2);
-
-  const response = useSWR(url2, fetcher)
-
-  debugger;
-
-  return { response }
 }
 
 export function CategoriesDataSource(url, token) {
@@ -80,6 +48,24 @@ export function ProductPriceAndStockDataSource(url, token, productId) {
   };
 }
 
+// Work in Progress
+export const ProductsDataSourceWithSwr = (baseurl, clientId, clientSecret, initialData, token) => {
+  //const token = await Entando6KeycloakAccessTokenDataSource(url, clientId, clientSecret)();
+  const productsUrl = `${baseurl}/api/plugins/cms/contents?filters[0].attribute=typeCode&filters[0].operator=eq&filters[0].value=PRD`;
+
+  const fetcher = (url) =>
+    axios
+      .get(url, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => res.data.payload.map((p) => normalizeProduct(baseurl, p)));
+
+  const { data, error } = useSWR(productsUrl, fetcher, { initialData });
+
+  return {
+    data,
+    error,
+  };
+};
+
 // private utils
 // TODO should be using object-mapper lib
 const normalizeCategory = (baseurl, category) => {
@@ -102,12 +88,13 @@ const normalizeBanner = (baseurl, banner) => {
   return `${url}${image.values.en?.versions[0].path}`;
 };
 
-const normalizeProduct = (baseurl, product) => {
+export const normalizeProduct = (baseurl, product) => {
   const [url] = baseurl.split('/entando-de-app');
 
   const title = product.attributes.find((attr) => attr.code === 'title')?.values?.en;
   const code = product.attributes.find((attr) => attr.code === 'code')?.values?.en;
   const price = product.attributes.find((attr) => attr.code === 'price')?.value;
+  const stock = product.attributes.find((attr) => attr.code === 'stock')?.value;
   const category = product.attributes.find((attr) => attr.code === 'category')?.value;
   const imagesAttr = product.attributes.find((attr) => attr.code === 'images')?.elements;
 
@@ -117,6 +104,7 @@ const normalizeProduct = (baseurl, product) => {
     title,
     code,
     price,
+    stock,
     category,
     images,
   };

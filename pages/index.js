@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import React from 'react';
-import useSWR from "swr"
+import useSWR from 'swr';
 
 import Banner from '../components/widgets/Banner/index.jsx';
 import Footer from '../components/widgets/Footer/index.jsx';
@@ -10,6 +10,7 @@ import ProductCard from '../components/widgets/ProductCard/index.jsx';
 import {
   BannersDataSource,
   CategoriesDataSource,
+  normalizeProduct,
   ProductsDataSource,
   ProductsDataSourceWithSwr,
 } from '../datasources/ecommerce-entando6-cms';
@@ -17,20 +18,33 @@ import { Entando6KeycloakAccessTokenDataSource } from '../datasources/entando6-c
 import styles from '../styles/Home.module.css';
 
 const URL = 'http://quickstart-release-e6-3-0.apps.rd.entando.org';
+const CORE_URL = `${URL}/entando-de-app`;
+const CLIENT_ID = 'entando-bundler';
+const CLIENT_SECRET = '1c5e2fe8-ff41-4bc7-8f2b-3509133a2a91';
 
-export default function Home({ products = [], categories = [], banners = [], baseurl, token }) {
-  const products2 = ProductsDataSourceWithSwr(baseurl, token)
-  if (!products2) return <h1>Loading...</h1>
-  console.log(products2);
+export default function Home({ products = [], categories = [], banners = [], token }) {
+  const { data, error } = ProductsDataSourceWithSwr(
+    CORE_URL,
+    CLIENT_ID,
+    CLIENT_SECRET,
+    products,
+    token
+  );
+
+  console.log('Client Response:');
+  console.log(error);
+  console.log(data);
+
+  if (error) {
+    return <h1>Something went wrong!</h1>;
+  }
+
+  if (!data) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <div>
-      <div className="container">
-        <h1>My Products</h1>
-        {products2.map(product2 => (
-          <Product product2={product2} key={post.id} />
-        ))}
-      </div>
       <div className={styles.container}>
         <Head>
           <title>{'Entando'}</title>
@@ -44,7 +58,7 @@ export default function Home({ products = [], categories = [], banners = [], bas
         <main className={styles.main}>
           <h2 className={styles.title}>{'Daily Offers'}</h2>
           <div className={styles.productList}>
-            {products.map((product) => (
+            {data.map((product) => (
               <ProductCard key={product.id} {...product} />
             ))}
           </div>
@@ -56,32 +70,16 @@ export default function Home({ products = [], categories = [], banners = [], bas
   );
 }
 
-export function Product({ product2 }) {
-  console.log('Aqui: ${product2}');
-  const { id } = product2
-  return (
-    <div className="Card">
-      <h1 className="Card--title">
-        {id}
-      </h1>
-    </div>
-  )
-}
-
 export async function getStaticProps() {
   console.log('Calling getStaticProps');
 
-  const baseurl = `${URL}/entando-de-app`;
-  const clientId = 'entando-bundler';
-  const clientSecret = '1c5e2fe8-ff41-4bc7-8f2b-3509133a2a91';
-
-  const token = await Entando6KeycloakAccessTokenDataSource(baseurl, clientId, clientSecret)();
+  const token = await Entando6KeycloakAccessTokenDataSource(CORE_URL, CLIENT_ID, CLIENT_SECRET)();
   console.log('Fetched Entando Keycloak Token');
 
   const datasources = [
-    ProductsDataSource(baseurl, token),
-    CategoriesDataSource(baseurl, token),
-    BannersDataSource(baseurl, token),
+    ProductsDataSource(CORE_URL, token),
+    CategoriesDataSource(CORE_URL, token),
+    BannersDataSource(CORE_URL, token),
   ];
 
   console.log('Created datasources...');
@@ -95,7 +93,6 @@ export async function getStaticProps() {
       products,
       categories,
       banners,
-      baseurl,
       token,
     },
   };
