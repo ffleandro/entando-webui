@@ -1,5 +1,5 @@
 {
-  "name": "app-engine",
+  "name": "app-engine-v7",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,14 +13,10 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "carbon-components": "^10.26.0",
-    "carbon-components-react": "^7.26.0",
-    "carbon-icons": "^7.0.7",
     "next": "^10.0.5",
     "object-mapper": "^6.2.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
-    "react-awesome-slider": "^4.1.0",
     "react-dom": "^17.0.1",
     "swr": "^0.4.0"
   },
