@@ -1,0 +1,97 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:import/recommended",
+  ],
+  "plugins": ["prettier", "import"],
+  "rules": {
+    "arrow-parens": ["error", "always"],
+    "curly": "error",
+    "dot-notation": [2, { "allowKeywords": true, "allowPattern": "^[a-z]+(_[a-z]+)+$" }],
+    "import/extensions": ["error", "never"],
+    "import/newline-after-import": ["error", { "count": 1 }],
+    "import/no-named-as-default": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          ["builtin", "external", "internal"],
+          ["index", "sibling", "parent"]
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    "import/unambiguous": "off",
+    "no-unused-vars": ["error", { "ignoreRestSiblings": true }],
+    "one-var": ["error", "never"],
+    "object-shorthand": ["error", "always"],
+    "prefer-const": ["error", { "destructuring": "all" }],
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "trailingComma": "es5",
+        "printWidth": 100,
+        "endOfLine":"auto",
+        "arrowParens": "always"
+      }
+    ],
+    "quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": false }],
+    "react/destructuring-assignment": ["error", "always", { "ignoreClassFields": true }],
+    "react/no-access-state-in-setstate": "error",
+    "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "ignore" }],
+    "react/jsx-fragments": "error",
+    "react/jsx-no-literals": "error",
+    "react/prop-types": "off",
+    "react/sort-prop-types": [
+      "error",
+      {
+        "ignoreCase": true,
+        "requiredFirst": true,
+        "sortShapeProp": true
+      }
+    ],
+    "sort-imports": [
+      "error",
+      {
+        "ignoreDeclarationSort": true,
+        "ignoreCase": true
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["*.md"],
+      "rules": {
+        "react/react-in-jsx-scope": "off",
+        "react/jsx-no-literals": "off",
+        "react/jsx-no-undef": "off",
+        "no-undef": "off",
+        "no-console": "off",
+        "prettier/prettier": "off",
+        "import/no-unresolved": [2, { "ignore": ["apollo-react/*"] }],
+        "import/namespace": [2, { "allowComputed": true }]
+      }
+    }
+  ],
+  "settings": {
+    "react": {
+      "version": "16.8.0"
+    }
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "jest": true,
+    "browser": true
+  },
+  "globals": {
+    "shallowSetup": "readonly"
+  }
+}

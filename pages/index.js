@@ -1,70 +1,69 @@
 import Head from 'next/head';
-import CardGridWidget from '../components/widgets/cardgrid.jsx';
+import React from 'react';
+
+import Banner from '../components/widgets/Banner/index.jsx';
+import Footer from '../components/widgets/Footer/index.jsx';
+import Header from '../components/widgets/Header/index.jsx';
+import Menu from '../components/widgets/Menu/index.jsx';
+import ProductCard from '../components/widgets/ProductCard/index.jsx';
+import {
+  BannersDataSource,
+  CategoriesDataSource,
+  ProductsDataSource,
+} from '../datasources/ecommerce-entando6-cms';
+import { Entando6KeycloakAccessTokenDataSource } from '../datasources/entando6-keycloak';
 import styles from '../styles/Home.module.css';
 
-import {
-  Entando6KeycloakAccessTokenDataSource,
-  Entando6CMSContentsDataSource,
-  Entando6CMSContentDataSource,
-} from '../datasources/entando6-cms.js';
+const URL = 'http://quickstart-release-e6-3-0.apps.rd.entando.org';
+const CORE_URL = `${URL}/entando-de-app`;
+const CLIENT_ID = 'entando-bundler';
+const CLIENT_SECRET = '4559a2b7-5190-4ffb-a6bd-f85f1e5a5e66';
 
-export default function Home({ products, categories, banners }) {
+export default function Home({ products = [], categories = [], banners = [] }) {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Entando</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div>
+      <div className={styles.container}>
+        <Head>
+          <title>{'Entando'}</title>
+          <link rel="icon" href="/favicon.png" />
+        </Head>
 
-      <main className={styles.main}>
-        {products.map((p) => (
-          <p key={p.id}>{p.id}</p>
-        ))}
+        <Header />
+        <Menu categories={categories} />
+        <Banner banners={banners} />
 
-        {categories.map((c) => (
-          <p key={c.id}>{c.id}</p>
-        ))}
+        <main className={styles.main}>
+          <h2 className={styles.title}>{'Daily Offers'}</h2>
+          <div className={styles.productList}>
+            {products.map((product) => (
+              <ProductCard key={product.id} {...product} />
+            ))}
+          </div>
+        </main>
 
-        {banners.map((b) => (
-          <p key={b.id}>{b.id}</p>
-        ))}
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+        <Footer />
+      </div>
     </div>
   );
 }
 
 export async function getStaticProps() {
   console.log('Calling getStaticProps');
-  
-  const baseurl = 'http://quickstart-release-e6-3-0.apps.rd.entando.org/entando-de-app';
-  const clientId = 'entando-bundler';
-  const clientSecret = '1c5e2fe8-ff41-4bc7-8f2b-3509133a2a91';
 
-  const token = await Entando6KeycloakAccessTokenDataSource(baseurl, clientId, clientSecret)();
+  const token = await Entando6KeycloakAccessTokenDataSource(CORE_URL, CLIENT_ID, CLIENT_SECRET)();
   console.log('Fetched Entando Keycloak Token');
 
   const datasources = [
-    Entando6CMSContentsDataSource(baseurl, token, 'PRD'),
-    Entando6CMSContentsDataSource(baseurl, token, 'CTG'),
-    Entando6CMSContentsDataSource(baseurl, token, 'BAN'),
+    ProductsDataSource(CORE_URL, token),
+    CategoriesDataSource(CORE_URL, token),
+    BannersDataSource(CORE_URL, token),
   ];
 
   console.log('Created datasources...');
 
   const results = await Promise.all(datasources.map(async (d) => d()));
 
-  const [ banners, products, categories ] = results;
+  const [products, categories, banners] = results;
 
   return {
     props: {
