@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import React from 'react';
-import useSWR from 'swr';
 
 import Banner from '../components/widgets/Banner/index.jsx';
 import Footer from '../components/widgets/Footer/index.jsx';
@@ -10,39 +9,17 @@ import ProductCard from '../components/widgets/ProductCard/index.jsx';
 import {
   BannersDataSource,
   CategoriesDataSource,
-  normalizeProduct,
   ProductsDataSource,
-  ProductsDataSourceWithSwr,
 } from '../datasources/ecommerce-entando6-cms';
-import { Entando6KeycloakAccessTokenDataSource } from '../datasources/entando6-cms';
+import { Entando6KeycloakAccessTokenDataSource } from '../datasources/entando6-keycloak';
 import styles from '../styles/Home.module.css';
 
 const URL = 'http://quickstart-release-e6-3-0.apps.rd.entando.org';
 const CORE_URL = `${URL}/entando-de-app`;
 const CLIENT_ID = 'entando-bundler';
-const CLIENT_SECRET = '1c5e2fe8-ff41-4bc7-8f2b-3509133a2a91';
+const CLIENT_SECRET = '4559a2b7-5190-4ffb-a6bd-f85f1e5a5e66';
 
-export default function Home({ products = [], categories = [], banners = [], token }) {
-  const { data, error } = ProductsDataSourceWithSwr(
-    CORE_URL,
-    CLIENT_ID,
-    CLIENT_SECRET,
-    products,
-    token
-  );
-
-  console.log('Client Response:');
-  console.log(error);
-  console.log(data);
-
-  if (error) {
-    return <h1>Something went wrong!</h1>;
-  }
-
-  if (!data) {
-    return <h1>Loading...</h1>;
-  }
-
+export default function Home({ products = [], categories = [], banners = [] }) {
   return (
     <div>
       <div className={styles.container}>
@@ -58,7 +35,7 @@ export default function Home({ products = [], categories = [], banners = [], tok
         <main className={styles.main}>
           <h2 className={styles.title}>{'Daily Offers'}</h2>
           <div className={styles.productList}>
-            {data.map((product) => (
+            {products.map((product) => (
               <ProductCard key={product.id} {...product} />
             ))}
           </div>
@@ -93,7 +70,6 @@ export async function getStaticProps() {
       products,
       categories,
       banners,
-      token,
     },
   };
 }

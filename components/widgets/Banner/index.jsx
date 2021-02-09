@@ -10,7 +10,6 @@ const AutoplaySlider = withAutoplay(AwesomeSlider);
 
 export const Banner = ({ banners }) => (
   <div className={styles.wrapper}>
-    {console.log(banners)}
     <AutoplaySlider
       animation="cubeAnimation"
       play={true}
