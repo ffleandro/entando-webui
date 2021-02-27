@@ -1,0 +1,36 @@
+FROM entando/entando-de-app-wildfly:6.3.25
+
+RUN echo "$(whoami) [$UID]" \
+ && cat /etc/os-release \
+  ;
+
+# ##################################################### ROOT START 
+USER root
+  
+ADD runner.sh /home/jboss/runner.sh
+RUN chmod +x /home/jboss/runner.sh
+
+USER jboss
+ADD node_modules /home/jboss/node_modules
+ADD .next /home/jboss/.next
+COPY package.json /home/jboss/
+# ##################################################### END
+
+RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.37.2/install.sh | bash \
+ && . ~/.bashrc \
+ && nvm install 14.16.0 \
+ && echo "VERSIONS:" \
+ && node -v && npm -v \
+  ;
+
+RUN sed -i \
+        "s/jboss\.http\.port:8080/jboss\.http\.port:8088/g" \
+        "/wildfly/standalone/configuration/standalone.xml" \
+  ;
+
+RUN sed -i \
+        's|\${WILDFLY_PUBLIC_BIND_ADDRESS:-$(hostname -i)}|127.0.0.1|g' \
+        "/wildfly/bin/standalone-openshift.sh" \
+  ;
+
+CMD [ "bash", "/home/jboss/runner.sh" ]
