@@ -59,3 +59,15 @@ export function Entando6CorePageConfigurationSource(url, token, pageCode) {
     return res.data.payload;
   };
 }
+
+export function Entando6CorePageSettingsDataSource(url, token) {
+  console.log('Creating PageSettings Data Source');
+  return async () => {
+    console.log('Calling Entando6CorePageSettingsDataSource...');
+    const res = await axios.get(`${url}/api/pageSettings`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return res.data.payload;
+  };
+}
