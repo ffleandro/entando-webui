@@ -21,10 +21,12 @@ export async function getServerSideProps({ req, res }) {
   const isPrivatePage = true;
   const session = await getSession({ req });
 
+  console.log('----> SESSION: ', session);
+
   if (isPrivatePage && (!session || !session.user)) {
     return {
       redirect: {
-        destination: `http://localhost:5000/api/auth/signin?callbackUrl=${process.env.NEXTAUTH_URL}${req.url}`,
+        destination: `${process.env.NEXTAUTH_URL}/api/auth/signin?callbackUrl=${process.env.NEXTAUTH_URL}${req.url}`,
       },
     };
   }

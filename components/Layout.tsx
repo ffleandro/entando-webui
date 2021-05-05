@@ -1,17 +1,14 @@
-import * as React from 'react'
-import Head from 'next/head'
+import Head from 'next/head';
+import * as React from 'react';
 
-import { Footer } from './Footer'
-import { Header } from './Header'
+import { Footer } from './Footer';
+import { Header } from './Header';
 
 type Props = {
-  title?: string
-}
+  title?: string;
+};
 
-export const Layout: React.FC<Props> = ({
-  children,
-  title = 'Next.js + Keycloak Example',
-}) => (
+export const Layout: React.FC<Props> = ({ children, title = 'Next.js + Keycloak Example' }) => (
   <div>
     <Head>
       <title>{title}</title>
@@ -27,4 +24,4 @@ export const Layout: React.FC<Props> = ({
     <div className="container my-5">{children}</div>
     <Footer />
   </div>
-)
+);

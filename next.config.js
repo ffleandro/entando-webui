@@ -1,6 +1,9 @@
 //import { Entando6CorePageSettingsDataSource } from '../datasources/entando6-core';
 
 module.exports = {
+  future: {
+    webpack5: true,
+  },
   serverRuntimeConfig: {
     PORTALUI_ADDR: process.env.PORTALUI_ADDR || 'http://localhost:8088',
   },
