@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 
-import { SingleSpaLayout } from '../components/SingleSpaLayout';
-import SSPAWidget, { createImportMapFragment } from '../components/SSPAWidget';
+import { Layout } from '../components/Layout';
+import SPAWidget, { createImportMapFragment } from '../components/SPAWidget';
 
 interface Props {}
 
@@ -22,15 +22,15 @@ const mfApp2 = {
 
 const SpaRemoteParcelExamplePage: NextPage<Props> = () => {
   return (
-    <SingleSpaLayout>
+    <Layout>
       <script type="systemjs-importmap" dangerouslySetInnerHTML={{ __html: importMaps }}></script>
       <script src="https://cdn.jsdelivr.net/npm/systemjs/dist/system.js"></script>
       <script
         type="systemjs-importmap"
         dangerouslySetInnerHTML={{ __html: createImportMapFragment({ ...mfApp2 }) }}
       ></script>
-      <SSPAWidget {...mfApp2} />
-    </SingleSpaLayout>
+      <SPAWidget {...mfApp2} />
+    </Layout>
   );
 };
 

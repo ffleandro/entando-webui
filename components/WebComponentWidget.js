@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 
 
-export default function WCWidget({mfName, mfURL, customProps}) {
+export default function WebComponentWidget({mfName, mfURL, customProps}) {
     const [hydrated, setHydrated] = useState(false);
     useEffect(() => {
         //systemjs works as pure loader

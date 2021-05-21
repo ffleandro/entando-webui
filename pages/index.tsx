@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { useSession } from 'next-auth/client';
 import React from 'react';
 
-import { Layout } from '../components/Layout';
+import { Layout } from 'components/Layout';
 
 const IndexPage: NextPage = () => {
   const [session, loading] = useSession();

@@ -1,18 +1,16 @@
 import axios from 'axios';
 
 export async function Entando6PortalUIUrlDataSource(method, url, headers) {
+  //TODO: Call PortalUI API instead of direct web html calling
+  //TODO: Should handle all 400 and 500 errors
   console.log(`${method} ${url}`);
   
   let res = {};
-  //try {
   res = await axios({
     method: method,
     url: url,
     headers: { headers }
   });
-  /*} catch (error) {
-    console.log(error);
-  }*/
 
   return {
     html: res.data,
