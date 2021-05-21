@@ -7,8 +7,8 @@ export const Footer: React.FC = () => {
       <div className="container">
         <small className="text-muted">
           Repo:&nbsp;
-          <a href="https://github.com/ffleandro/entando-webui">
-            https://github.com/ffleandro/entando-webui
+          <a href="https://github.com/entando/entando-webui">
+            https://github.com/entando/entando-webui
           </a>
         </small>
       </div>

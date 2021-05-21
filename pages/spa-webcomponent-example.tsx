@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 
-import { SingleSpaLayout } from '../components/SingleSpaLayout';
-import WCWidget from '../components/WCWidget';
+import { Layout } from '../components/Layout';
+import WebComponentWidget from '../components/WebComponentWidget';
 
 interface Props {}
 
@@ -14,13 +14,13 @@ const mfWcApp = {
   },
 };
 
-const SpaWCExamplePage: NextPage<Props> = () => {
+const SpaWebComponentExamplePage: NextPage<Props> = () => {
   return (
-    <SingleSpaLayout>
+    <Layout>
       <script src="https://cdn.jsdelivr.net/npm/systemjs/dist/system.js"></script>
-      <WCWidget {...mfWcApp} />
-    </SingleSpaLayout>
+      <WebComponentWidget {...mfWcApp} />
+    </Layout>
   );
 };
 
-export default SpaWCExamplePage;
+export default SpaWebComponentExamplePage;

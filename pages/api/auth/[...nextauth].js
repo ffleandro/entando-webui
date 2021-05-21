@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 
-import { keycloakCfg } from '../../_keycloak.tsx';
+import { keycloakCfg } from 'components/keycloak.tsx';
 
 export default NextAuth({
   providers: [
@@ -26,11 +26,9 @@ export default NextAuth({
       clientId: 'entando-web',
       callbacks: {
         async session(session, user) {
-          console.log('----------> Add Props to Session!', user);
           return session;
         },
         async redirect(url, baseUrl) {
-          console.log('----------> Validating Redirect!', url);
           return url;
         },
       },

@@ -1,14 +1,13 @@
 import Head from 'next/head';
 import * as React from 'react';
-
-import { Footer } from './Footer';
-import { Header } from './Header';
+import { Header } from 'components/Header';
+import { Footer } from 'components/Footer';
 
 type Props = {
   title?: string;
 };
 
-export const Layout: React.FC<Props> = ({ children, title = 'Next.js + Keycloak Example' }) => (
+export const Layout: React.FC<Props> = ({ children, title = 'Entando WebUI Example' }) => (
   <div>
     <Head>
       <title>{title}</title>
