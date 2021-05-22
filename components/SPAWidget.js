@@ -11,8 +11,6 @@ function loadMf(mfName, customProps) {
     })
 }
 
-
-
 export default function SSPAWidget({mfName, customProps}) {
     useEffect(() => {
         const parcelPromise = loadMf(mfName, customProps)

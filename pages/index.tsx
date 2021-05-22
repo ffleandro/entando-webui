@@ -1,31 +1,71 @@
 import type { NextPage } from 'next';
-import { useSession } from 'next-auth/client';
+import Link from 'next/link'
 import React from 'react';
 
 import { Layout } from 'components/Layout';
 
 const IndexPage: NextPage = () => {
-  const [session, loading] = useSession();
-
-  const loggedinState = session?.user ? (
-    <span className="text-success">logged in</span>
-  ) : (
-    <span className="text-danger">NOT logged in</span>
-  );
-
-  const welcomeMessage = session?.user
-    ? `Welcome back ${session.user.email ?? ''}!`
-    : 'Welcome visitor. Please login to continue.';
-
   return (
     <Layout title="Home | Next.js + TypeScript Example">
-      <h1 className="mt-5">Hello Next.js + Keycloak 👋</h1>
+      <h1 className="mt-5">Hello Entando WebUI Developer 👋</h1>
       <div className="mb-5 lead text-muted">
-        This is an example of a Next.js site using Keycloak.
+        Please find below a list of examples of what you can build with Entando WebUI
       </div>
 
-      <p>You are: {loggedinState}</p>
-      <p>{welcomeMessage}</p>
+      <span>Standard Next.js React UI Components:</span>
+      <ul>
+        <li>
+        <Link href="/">
+          <a>Sample Next.js with UI React Components</a>
+        </Link>
+        </li>
+        <li>
+        <Link href="/profile">
+          <a>Sample Next.js Private Page protected by Keycloak</a>
+        </Link>
+        </li>
+        <li>
+        <Link href="/ecommerce">
+          <a>E-commerce Example Page integrated with Entando CMS Datasources</a>
+        </Link>
+        </li>
+        <li>
+        <Link href="/figma-to-react-example">
+          <a>Example Page demonstrating Figma to React design conversion</a>
+        </Link>
+        </li>
+      </ul>
+      <span>Advanced SingleSPA MFE Examples:</span>
+      <ul>
+        <li>
+        <Link href="/spa-parcel-example">
+          <a>Simple SingleSPA Page wrapping Parcels</a>
+        </Link>
+        </li>
+        <li>
+        <Link href="/spa-remote-parcel-example">
+          <a>Advanced SingleSPA Page Example wrapping Remote MFEs</a>
+        </Link>
+        </li>
+        <li>
+        <Link href="/spa-webcomponent-example">
+          <a>Example Page using Entando Webcomponents</a>
+        </Link>
+        </li>
+      </ul>
+      <span>Retrofit with PortalUI:</span>
+      <ul>
+        <li>
+        <Link href="/entando-de-app/en/service.page">
+          <a>Overriden PortalUI Route</a>
+        </Link>
+        </li>
+        <li>
+        <Link href="/entando-de-app/en/irakli.page">
+          <a>Reverse Proxied Page to PortalUI</a>
+        </Link>
+        </li>
+      </ul>
     </Layout>
   );
 };

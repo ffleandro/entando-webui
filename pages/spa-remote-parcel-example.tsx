@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 
-import { Layout } from '../components/Layout';
-import SPAWidget, { createImportMapFragment } from '../components/SPAWidget';
+import { Layout } from 'components/Layout';
+import SPAWidget, { createImportMapFragment } from 'components/SPAWidget';
 
 interface Props {}
 

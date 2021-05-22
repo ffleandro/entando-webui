@@ -13,6 +13,7 @@ export const Layout: React.FC<Props> = ({ children, title = 'Entando WebUI Examp
       <title>{title}</title>
       <meta charSet="utf-8" />
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      <link rel="icon" href="/favicon.png" />
       <link
         rel="stylesheet"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"

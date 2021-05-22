@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 
-import { keycloakCfg } from 'components/keycloak.tsx';
+import { keycloakCfg } from 'keycloak.config';
 
 export default NextAuth({
   providers: [

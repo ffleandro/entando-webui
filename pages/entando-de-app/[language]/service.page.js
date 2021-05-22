@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { Layout } from 'components/Layout';
 
 /**
@@ -16,15 +15,13 @@ import { Layout } from 'components/Layout';
  **/
 function ServicePage() {
   return (
-    <>
-      <Head>
-        <link rel="icon" href="/favicon.png" />
-      </Head>
-
-      <Layout title="Service Page | WebUI Example">
-        <h1 className="my-5">Welcome to the Next Generation Entando Web Renderization Engine</h1>}
-      </Layout>
-    </>
+    <Layout title="Service Page | WebUI Example">
+      <h1 className="my-5">Welcome to the Next Generation Entando Web Renderization Engine 👋</h1>
+      <div className="mb-5 lead text-muted">
+        This page route was overriden from PortalUI,
+        so that you can gradually migrate your Legacy pages into WebUI.
+      </div>
+    </Layout>
   );
 }
 
