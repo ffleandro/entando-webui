@@ -1,8 +1,14 @@
+import { Layout } from 'components/Layout';
 import type { NextPage } from 'next';
 import { useSession } from 'next-auth/client';
 import React from 'react';
 
-import { Layout } from 'components/Layout';
+interface User {
+  name?: string;
+  email?: string;
+  image?: string;
+  preferred_username?: string;
+}
 
 const ProfilePage: NextPage = () => {
   const [session, loading] = useSession();
@@ -11,22 +17,26 @@ const ProfilePage: NextPage = () => {
     ? `Welcome back ${session.user.email ?? ''}!`
     : 'Welcome visitor. Please login to continue.';
 
+  const user: User = session?.user;
+
   const profile = session?.user ? (
     <>
-      <p>You are: <span className="text-success">logged in</span></p>
+      <p>
+        You are: <span className="text-success">logged in</span>
+      </p>
       <p>{welcomeMessage}</p>
       <ul>
         <li>
           <span className="font-weight-bold mr-1">Email:</span>
-          <span className="text-muted">{session.user.email ?? ''}</span>
+          <span className="text-muted">{user.email ?? ''}</span>
         </li>
         <li>
           <span className="font-weight-bold mr-1">Username:</span>
-          <span className="text-muted">{session.user.preferred_username ?? ''}</span>
+          <span className="text-muted">{user.preferred_username ?? ''}</span>
         </li>
         <li>
           <span className="font-weight-bold mr-1">Name:</span>
-          <span className="text-muted">{session.user.name ?? ''}</span>
+          <span className="text-muted">{user.name ?? ''}</span>
         </li>
       </ul>
     </>
