@@ -2,6 +2,7 @@ import Head from 'next/head';
 import * as React from 'react';
 import { Header } from 'components/Header';
 import { Footer } from 'components/Footer';
+//import { Footer, Header } from '@entando-webui-ootb-components/react';
 
 type Props = {
   title?: string;

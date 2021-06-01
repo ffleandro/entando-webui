@@ -1,21 +1,22 @@
+import React from 'react';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import Link from 'next/link';
-import * as React from 'react';
+
+import styles from './Header.module.css';
 
 export const Header: React.FC = () => {
   const [session, loading] = useSession();
 
   return (
-    <header className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <header className={styles.wrapper}>
       <Link href="/">
-        <a className="my-0 mr-md-auto font-weight-bold text-dark">Entando WebUI: Next.js + React + SingleSPA</a>
+        <img src="/entando.svg" alt="Entando Logo" className={styles.img} />
       </Link>
-      <nav className="my-2 my-md-0 mr-md-3">
+      <>
         <Link href="/profile">
           <a className="p-2 text-dark">Profile</a>
         </Link>
-      </nav>
-      {console.log(session)}
+      </>
       {session?.user ? (
         <>
           <button
@@ -46,3 +47,5 @@ export const Header: React.FC = () => {
     </header>
   );
 };
+
+export default Header;
