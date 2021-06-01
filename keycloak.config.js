@@ -1,5 +1,5 @@
 export const keycloakCfg = {
-  url: 'http://<REPLACE_WITH_AUTH_URL>',
+  url: 'http://quickstart-kc-release-e6-3-0.apps.rd.entando.org/auth',
   realm: 'entando',
   clientId: 'entando-web',
 };
